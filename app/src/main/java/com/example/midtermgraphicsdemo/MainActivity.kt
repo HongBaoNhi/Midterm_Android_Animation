@@ -1,6 +1,7 @@
 package com.example.midtermgraphicsdemo
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.AnimatedVectorDrawable
@@ -10,16 +11,12 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
@@ -36,9 +33,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Root container
+        // Root container - Unified Light Pastel Background
         rootLayout = FrameLayout(this).apply {
-            setBackgroundColor(Color.parseColor("#0F172A")) // Dark modern background
+            setBackgroundColor(Color.parseColor("#F8F5FC"))
         }
 
         // ==================== 1. MAIN MENU DASHBOARD ====================
@@ -61,14 +58,14 @@ class MainActivity : AppCompatActivity() {
             text = "GRAPHICS & ANIMATION"
             textSize = 24f
             typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#F8FAFC"))
+            setTextColor(Color.parseColor("#514462"))
             gravity = Gravity.CENTER
         }
 
         val tvHeaderSub = TextView(this).apply {
-            text = "Midterm Project • Select a demo below to launch"
+            text = "• Select a demo below to launch •"
             textSize = 13f
-            setTextColor(Color.parseColor("#94A3B8"))
+            setTextColor(Color.parseColor("#917F9F"))
             gravity = Gravity.CENTER
             setPadding(0, 10, 0, 50)
         }
@@ -76,47 +73,90 @@ class MainActivity : AppCompatActivity() {
         menuLayout.addView(tvHeaderTitle)
         menuLayout.addView(tvHeaderSub)
 
-        // ==================== CARD 1: MEMBER 1 (Compose & Lottie Studio) ====================
+        // ==================== 6 INDIVIDUAL DEMO CARDS ====================
         val card1 = createMenuCard(
-            title = "1. Compose & Lottie Studio",
-            description = "MotionLab Compose Canvas Studio & Lottie Vector Animation",
-            tag = "Member 1",
-            accentColorHex = "#A55EEA"
+            title = "1. 2D Canvas Game",
+            description = "Interactive 2D bouncing ball game built with Canvas",
+            accentColorHex = "#00A8A8"
         ) {
-            showMember1CombinedDemo()
+            showDemoView("🎮 1. 2D Canvas Game", Simple2DGameView(this@MainActivity))
         }
 
-        // ==================== CARD 2: MEMBER 2 (OpenGL 3D & Vector Anim) ====================
         val card2 = createMenuCard(
-            title = "2. OpenGL 3D & Vector Animation",
-            description = "3D Pyramid with OpenGL ES & Bell Shake Vector Animation (AVD)",
-            tag = "Member 2",
-            accentColorHex = "#FFA801"
+            title = "2. Fractal Tree Graphic",
+            description = "Recursive fractal tree generation with touch control",
+            accentColorHex = "#27AE60"
         ) {
-            showMember2CombinedDemo()
+            showDemoView("🌳 2. Fractal Tree Graphic", FractalTreeView(this@MainActivity))
         }
 
-        // ==================== CARD 3: MEMBER 3 (Game 2D & Fractal Tree) ====================
         val card3 = createMenuCard(
-            title = "3. 2D Game & Fractal Tree",
-            description = "Simple 2D bouncing game & Recursive fractal tree generation",
-            tag = "Member 3",
-            accentColorHex = "#00D8D6"
+            title = "3. Compose Animation Studio",
+            description = "MotionLab pastel animation studio built with Jetpack Compose",
+            accentColorHex = "#9A7AC9"
         ) {
-            showMember3CombinedDemo()
+            val intent = Intent(this@MainActivity, ComposeAnimationActivity::class.java)
+            startActivity(intent)
+        }
+
+        val card4 = createMenuCard(
+            title = "4. Lottie Vector Studio",
+            description = "Interactive Lottie JSON vector playback & frame scrubber",
+            accentColorHex = "#E86381"
+        ) {
+            val intent = Intent(this@MainActivity, LottieAnimationActivity::class.java)
+            startActivity(intent)
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        val card5 = createMenuCard(
+            title = "5. OpenGL ES 3D Pyramid",
+            description = "Rotating 3D pyramid with touch rotation & OpenGL ES",
+            accentColorHex = "#D35400"
+        ) {
+            val glSurfaceView = GLSurfaceView(this@MainActivity).apply {
+                setEGLContextClientVersion(2)
+                val renderer = MyGLRenderer()
+                setRenderer(renderer)
+
+                setOnTouchListener { v, event ->
+                    val x = event.x
+                    val y = event.y
+                    if (event.action == MotionEvent.ACTION_MOVE) {
+                        renderer.addTouchRotation((x - previousX) * 0.5f, (y - previousY) * 0.5f)
+                    } else if (event.action == MotionEvent.ACTION_UP) {
+                        v.performClick()
+                    }
+                    previousX = x
+                    previousY = y
+                    true
+                }
+            }
+            showDemoView("📐 5. OpenGL ES 3D Pyramid", glSurfaceView)
+        }
+
+        val card6 = createMenuCard(
+            title = "6. Vector Bell Animation",
+            description = "Animated Vector Drawable (AVD) bell shake on tap",
+            accentColorHex = "#C0392B"
+        ) {
+            showDemoView("🔔 6. Vector Bell Animation", createVectorBellView())
         }
 
         menuLayout.addView(card1)
         menuLayout.addView(card2)
         menuLayout.addView(card3)
+        menuLayout.addView(card4)
+        menuLayout.addView(card5)
+        menuLayout.addView(card6)
 
         scrollView.addView(menuLayout)
 
-        // ==================== 2. DEMO CONTAINER VIEW ====================
+        // ==================== DEMO CONTAINER VIEW ====================
         demoContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             visibility = View.GONE
-            setBackgroundColor(Color.parseColor("#10141C"))
+            setBackgroundColor(Color.parseColor("#F8F5FC"))
             layoutParams = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT
@@ -126,33 +166,28 @@ class MainActivity : AppCompatActivity() {
         // Top bar in demo view
         val topBar = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            setPadding(20, 20, 20, 20)
+            setPadding(30, 24, 30, 16)
             gravity = Gravity.CENTER_VERTICAL
-            setBackgroundColor(Color.parseColor("#1E293B"))
+            setBackgroundColor(Color.TRANSPARENT)
         }
 
-        val btnReturn = Button(this).apply {
-            text = "⬅ Back to Menu"
-            textSize = 13f
+        val btnReturn = TextView(this).apply {
+            text = "←"
+            textSize = 28f
             typeface = Typeface.DEFAULT_BOLD
-            isAllCaps = false
-            setTextColor(Color.WHITE)
-            background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 20f
-                setColor(Color.parseColor("#334155"))
-            }
-            setPadding(30, 10, 30, 10)
+            setTextColor(Color.parseColor("#514462"))
+            setPadding(10, 0, 30, 0)
+            isClickable = true
+            isFocusable = true
             setOnClickListener {
                 returnToMenu()
             }
         }
 
         tvDemoTitle = TextView(this).apply {
-            textSize = 16f
+            textSize = 17f
             typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#F8FAFC"))
-            setPadding(30, 0, 0, 0)
+            setTextColor(Color.parseColor("#514462"))
         }
 
         topBar.addView(btnReturn)
@@ -168,7 +203,6 @@ class MainActivity : AppCompatActivity() {
         demoContainer.addView(topBar)
         demoContainer.addView(demoContentArea)
 
-        // Add both layouts to root
         rootLayout.addView(scrollView)
         rootLayout.addView(demoContainer)
 
@@ -178,7 +212,6 @@ class MainActivity : AppCompatActivity() {
     private fun createMenuCard(
         title: String,
         description: String,
-        tag: String,
         accentColorHex: String,
         onClick: () -> Unit
     ): LinearLayout {
@@ -192,8 +225,8 @@ class MainActivity : AppCompatActivity() {
             background = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
                 cornerRadius = 32f
-                setColor(Color.parseColor("#1E293B"))
-                setStroke(3, Color.parseColor("#334155"))
+                setColor(Color.parseColor("#FEFCFF"))
+                setStroke(2, Color.parseColor("#E7DEF2"))
             }
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -204,417 +237,60 @@ class MainActivity : AppCompatActivity() {
             setOnClickListener { onClick() }
         }
 
-        val topRow = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-        }
-
         val tvTitle = TextView(this).apply {
             text = title
-            textSize = 17f
-            typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#F1F5F9"))
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-        }
-
-        val tvTag = TextView(this).apply {
-            text = tag
-            textSize = 11f
+            textSize = 18f
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(accentColor)
-            setPadding(20, 8, 20, 8)
-            background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 16f
-                setColor(Color.parseColor("#0F172A"))
-                setStroke(2, accentColor)
-            }
         }
-
-        topRow.addView(tvTitle)
-        topRow.addView(tvTag)
 
         val tvDesc = TextView(this).apply {
             text = description
             textSize = 13f
-            setTextColor(Color.parseColor("#94A3B8"))
-            setPadding(0, 12, 0, 0)
+            setTextColor(Color.parseColor("#917F9F"))
+            setPadding(0, 10, 0, 0)
         }
 
-        card.addView(topRow)
+        card.addView(tvTitle)
         card.addView(tvDesc)
 
         return card
     }
 
-    // ==================== MEMBER 1 DEMO (Compose MotionLab & Lottie Studio) ====================
-    private fun showMember1CombinedDemo() {
-        val member1Layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // Sub-navigation bar between Compose Canvas Studio and Lottie Studio
-        val subNavBar = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER
-            setPadding(16, 16, 16, 16)
-            setBackgroundColor(Color.parseColor("#1E293B"))
-        }
-
-        val contentContainer = FrameLayout(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // Compose View 1: MotionLab Studio
-        val composeView1 = ComposeView(this).apply {
-            setContent {
-                MaterialTheme(
-                    colorScheme = lightColorScheme(
-                        primary = androidx.compose.ui.graphics.Color(0xFF9A7AC9),
-                        onPrimary = androidx.compose.ui.graphics.Color.White,
-                        background = androidx.compose.ui.graphics.Color(0xFFF6F1FB),
-                        surface = androidx.compose.ui.graphics.Color.White,
-                        onSurface = androidx.compose.ui.graphics.Color(0xFF514462)
-                    )
-                ) {
-                    MotionLabApp(onBackClick = { returnToMenu() })
-                }
-            }
-        }
-
-        // Compose View 2: Lottie Studio
-        val composeView2 = ComposeView(this).apply {
-            setContent {
-                MaterialTheme(
-                    colorScheme = lightColorScheme(
-                        primary = androidx.compose.ui.graphics.Color(0xFF9879C9),
-                        onPrimary = androidx.compose.ui.graphics.Color.White,
-                        surface = androidx.compose.ui.graphics.Color(0xFFFEFCFF),
-                        background = androidx.compose.ui.graphics.Color(0xFFF8F5FC)
-                    )
-                ) {
-                    LottieStudioScreen(onBackClick = { returnToMenu() })
-                }
-            }
-        }
-
-        val btnCompose = Button(this)
-        val btnLottie = Button(this)
-
-        fun updateSubButtons(isCompose: Boolean) {
-            val activeColor = Color.parseColor("#A55EEA")
-            val inactiveColor = Color.parseColor("#334155")
-
-            btnCompose.background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 20f
-                setColor(if (isCompose) activeColor else inactiveColor)
-            }
-            btnCompose.setTextColor(Color.WHITE)
-
-            btnLottie.background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 20f
-                setColor(if (!isCompose) activeColor else inactiveColor)
-            }
-            btnLottie.setTextColor(Color.WHITE)
-        }
-
-        btnCompose.apply {
-            text = "✨ 1. Compose Studio"
-            isAllCaps = false
-            textSize = 13f
-            typeface = Typeface.DEFAULT_BOLD
-            setPadding(30, 10, 30, 10)
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                setMargins(8, 0, 8, 0)
-            }
-            setOnClickListener {
-                updateSubButtons(true)
-                contentContainer.removeAllViews()
-                contentContainer.addView(composeView1)
-            }
-        }
-
-        btnLottie.apply {
-            text = "🌸 2. Lottie Studio"
-            isAllCaps = false
-            textSize = 13f
-            typeface = Typeface.DEFAULT_BOLD
-            setPadding(30, 10, 30, 10)
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                setMargins(8, 0, 8, 0)
-            }
-            setOnClickListener {
-                updateSubButtons(false)
-                contentContainer.removeAllViews()
-                contentContainer.addView(composeView2)
-            }
-        }
-
-        subNavBar.addView(btnCompose)
-        subNavBar.addView(btnLottie)
-
-        member1Layout.addView(subNavBar)
-        member1Layout.addView(contentContainer)
-
-        // Default to Compose Studio view
-        updateSubButtons(true)
-        contentContainer.addView(composeView1)
-
-        showDemoView("✨ Compose & Lottie Studio", member1Layout)
-    }
-
-    // ==================== MEMBER 2 DEMO (OpenGL 3D & Vector Anim) ====================
-    @SuppressLint("ClickableViewAccessibility")
-    private fun showMember2CombinedDemo() {
-        val member2Layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // Sub-navigation bar between OpenGL 3D and Vector Anim
-        val subNavBar = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER
-            setPadding(16, 16, 16, 16)
-            setBackgroundColor(Color.parseColor("#1E293B"))
-        }
-
-        val contentContainer = FrameLayout(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // Build OpenGL ES 3D View
-        val glSurfaceView = GLSurfaceView(this).apply {
-            setEGLContextClientVersion(2)
-            val renderer = MyGLRenderer()
-            setRenderer(renderer)
-
-            setOnTouchListener { v, event ->
-                val x = event.x
-                val y = event.y
-                if (event.action == MotionEvent.ACTION_MOVE) {
-                    renderer.addTouchRotation((x - previousX) * 0.5f, (y - previousY) * 0.5f)
-                } else if (event.action == MotionEvent.ACTION_UP) {
-                    v.performClick()
-                }
-                previousX = x
-                previousY = y
-                true
-            }
-        }
-
-        // Build Vector Drawable Bell Animation View
-        val vectorAnimView = LinearLayout(this).apply {
+    private fun createVectorBellView(): View {
+        val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
-            setBackgroundColor(Color.parseColor("#10141C"))
-        }
-
-        val tvHint = TextView(this).apply {
-            text = "🔔 Tap the bell to trigger Animated Vector Drawable (AVD)!"
-            textSize = 15f
-            typeface = Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor("#FFC107"))
-            gravity = Gravity.CENTER
-            setPadding(20, 20, 20, 40)
+            setBackgroundColor(Color.parseColor("#F8F5FC"))
         }
 
         val imageView = ImageView(this).apply {
             val drawable = ContextCompat.getDrawable(this@MainActivity, R.drawable.avd_bell)
             setImageDrawable(drawable)
             isClickable = true
-            setOnClickListener {
-                if (drawable is AnimatedVectorDrawable) {
-                    drawable.start()
-                }
-            }
-        }
-
-        vectorAnimView.addView(tvHint)
-        vectorAnimView.addView(imageView)
-
-        // Sub-buttons for Member 2
-        val btnOpenGL = Button(this)
-        val btnVector = Button(this)
-
-        fun updateSubButtons(isOpenGL: Boolean) {
-            val activeColor = Color.parseColor("#FFA801")
-            val inactiveColor = Color.parseColor("#334155")
-
-            btnOpenGL.background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 20f
-                setColor(if (isOpenGL) activeColor else inactiveColor)
-            }
-            btnOpenGL.setTextColor(if (isOpenGL) Color.BLACK else Color.WHITE)
-
-            btnVector.background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 20f
-                setColor(if (!isOpenGL) activeColor else inactiveColor)
-            }
-            btnVector.setTextColor(if (!isOpenGL) Color.BLACK else Color.WHITE)
-        }
-
-        btnOpenGL.apply {
-            text = "📐 1. OpenGL 3D Pyramid"
-            isAllCaps = false
-            textSize = 13f
-            typeface = Typeface.DEFAULT_BOLD
-            setPadding(30, 10, 30, 10)
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                setMargins(8, 0, 8, 0)
+            layoutParams = LinearLayout.LayoutParams(420, 420).apply {
+                gravity = Gravity.CENTER
             }
             setOnClickListener {
-                updateSubButtons(true)
-                contentContainer.removeAllViews()
-                contentContainer.addView(glSurfaceView)
-            }
-        }
-
-        btnVector.apply {
-            text = "🔔 2. Vector Bell Anim"
-            isAllCaps = false
-            textSize = 13f
-            typeface = Typeface.DEFAULT_BOLD
-            setPadding(30, 10, 30, 10)
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                setMargins(8, 0, 8, 0)
-            }
-            setOnClickListener {
-                updateSubButtons(false)
-                contentContainer.removeAllViews()
-                contentContainer.addView(vectorAnimView)
-
-                // Auto start bell animation on switch
-                val d = imageView.drawable
+                val d = drawable
                 if (d is AnimatedVectorDrawable) {
                     d.start()
                 }
             }
         }
 
-        subNavBar.addView(btnOpenGL)
-        subNavBar.addView(btnVector)
-
-        member2Layout.addView(subNavBar)
-        member2Layout.addView(contentContainer)
-
-        // Default to OpenGL 3D view
-        updateSubButtons(true)
-        contentContainer.addView(glSurfaceView)
-
-        showDemoView("📐 OpenGL 3D & Vector Anim", member2Layout)
-    }
-
-    // ==================== MEMBER 3 DEMO (Game 2D & Fractal Tree) ====================
-    private fun showMember3CombinedDemo() {
-        val member3Layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        // Sub-navigation bar between 2D Game and Fractal Tree
-        val subNavBar = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
+        val tvHint = TextView(this).apply {
+            text = "🔔 Tap the bell to trigger Animated Vector Drawable (AVD)!"
+            textSize = 14f
+            typeface = Typeface.DEFAULT_BOLD
+            setTextColor(Color.parseColor("#514462"))
             gravity = Gravity.CENTER
-            setPadding(16, 16, 16, 16)
-            setBackgroundColor(Color.parseColor("#1E293B"))
+            setPadding(20, 40, 20, 0)
         }
 
-        val contentContainer = FrameLayout(this).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        val gameView = Simple2DGameView(this)
-        val fractalView = FractalTreeView(this)
-
-        val btnGame = Button(this)
-        val btnFractal = Button(this)
-
-        fun updateSubButtons(isGame: Boolean) {
-            val activeColor = Color.parseColor("#00D8D6")
-            val inactiveColor = Color.parseColor("#334155")
-
-            btnGame.background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 20f
-                setColor(if (isGame) activeColor else inactiveColor)
-            }
-            btnGame.setTextColor(if (isGame) Color.BLACK else Color.WHITE)
-
-            btnFractal.background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = 20f
-                setColor(if (!isGame) activeColor else inactiveColor)
-            }
-            btnFractal.setTextColor(if (!isGame) Color.BLACK else Color.WHITE)
-        }
-
-        btnGame.apply {
-            text = "🎮 1. 2D Canvas Game"
-            isAllCaps = false
-            textSize = 13f
-            typeface = Typeface.DEFAULT_BOLD
-            setPadding(30, 10, 30, 10)
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                setMargins(8, 0, 8, 0)
-            }
-            setOnClickListener {
-                updateSubButtons(true)
-                contentContainer.removeAllViews()
-                contentContainer.addView(gameView)
-            }
-        }
-
-        btnFractal.apply {
-            text = "🌳 2. Fractal Tree"
-            isAllCaps = false
-            textSize = 13f
-            typeface = Typeface.DEFAULT_BOLD
-            setPadding(30, 10, 30, 10)
-            layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                setMargins(8, 0, 8, 0)
-            }
-            setOnClickListener {
-                updateSubButtons(false)
-                contentContainer.removeAllViews()
-                contentContainer.addView(fractalView)
-            }
-        }
-
-        subNavBar.addView(btnGame)
-        subNavBar.addView(btnFractal)
-
-        member3Layout.addView(subNavBar)
-        member3Layout.addView(contentContainer)
-
-        // Default to 2D Game view
-        updateSubButtons(true)
-        contentContainer.addView(gameView)
-
-        showDemoView("🎮 2D Game & Fractal Tree", member3Layout)
+        layout.addView(imageView)
+        layout.addView(tvHint)
+        return layout
     }
 
     private fun showDemoView(title: String, view: View) {

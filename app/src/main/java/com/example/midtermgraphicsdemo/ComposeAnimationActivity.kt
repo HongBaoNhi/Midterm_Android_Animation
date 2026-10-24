@@ -51,24 +51,19 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-// DEMO 1 - Jetpack Compose Animation + Canvas
-// No external icon library or third-party dependency is required.
-// If your project's package name is different, change the package line above.
-
 private val Ink = Color(0xFF514462)
 private val MutedInk = Color(0xFF917F9F)
 private val Purple = Color(0xFF9A7AC9)
 private val Pastels = listOf(
-    Color(0xFFC8B6FF), // lavender
-    Color(0xFFB8E4D5), // mint
-    Color(0xFFF7C8D8), // pink
-    Color(0xFFF8D9AC), // peach
-    Color(0xFFBBDCF5), // sky
-    Color(0xFFDCC9F0)  // lilac
+    Color(0xFFC8B6FF),
+    Color(0xFFB8E4D5),
+    Color(0xFFF7C8D8),
+    Color(0xFFF8D9AC),
+    Color(0xFFBBDCF5),
+    Color(0xFFDCC9F0)
 )
-// phần vẽ
 private data class SketchStroke(
-    val points: List<Offset>, // positions normalized from 0 to 1
+    val points: List<Offset>,
     val color: Color,
     val widthDp: Float
 )
@@ -94,13 +89,11 @@ class ComposeAnimationActivity : ComponentActivity() {
 
 @Composable
 fun MotionLabApp(onBackClick: () -> Unit = {}) {
-    // phần hình dạng
     var shapeColor by remember { mutableStateOf(Pastels[0]) }
     var shapeSize by remember { mutableFloatStateOf(150f) }
     var cornerRadius by remember { mutableFloatStateOf(28f) }
     var shapeRotation by remember { mutableFloatStateOf(0f) }
 
-    // phần icon đang được chọn
     var iconType by remember { mutableStateOf("heart") }
     var iconColor by remember { mutableStateOf(Color(0xFFAB78C6)) }
     var iconSize by remember { mutableFloatStateOf(75f) }
@@ -108,7 +101,6 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
     var pulseOn by remember { mutableStateOf(false) }
     var useHandDrawing by remember { mutableStateOf(false) }
 
-    // phần nội dung và kiểu chữ
     var customText by remember { mutableStateOf("Create your own magic ✨") }
     var textColor by remember { mutableStateOf(Ink) }
     var fontSize by remember { mutableFloatStateOf(19f) }
@@ -116,12 +108,10 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
     var boldText by remember { mutableStateOf(false) }
     var showText by remember { mutableStateOf(true) }
 
-    // phần lưu danh sách nét vẽ
     val strokes = remember { mutableStateListOf<SketchStroke>() }
     var brushColor by remember { mutableStateOf(Pastels[0]) }
     var brushSize by remember { mutableFloatStateOf(6f) }
 
-    //  phần animation + navigation mượt
     var messageIndex by remember { mutableIntStateOf(0) }
     var selectedTab by remember { mutableStateOf("Shape") }
     val messages = listOf("DESIGN IN MOTION", "MADE WITH COMPOSE", "CREATE • PLAY • INSPIRE")
@@ -175,19 +165,13 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                OutlinedButton(
+                IconButton(
                     onClick = onBackClick,
-                    shape = RoundedCornerShape(12.dp),
-                    border = BorderStroke(1.dp, Color(0xFFE4D5F2)),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color.White,
-                        contentColor = Ink
-                    ),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    modifier = Modifier.size(36.dp)
                 ) {
-                    Text("⬅ Back to Menu", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text("←", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Ink)
                 }
-                Spacer(Modifier.width(12.dp))
+                Spacer(Modifier.width(8.dp))
                 Column(Modifier.weight(1f)) {
                     Text("✦ MotionLab", color = Ink, fontSize = 26.sp, fontWeight = FontWeight.Bold)
                     Text("PASTEL ANIMATION STUDIO", color = MutedInk, fontSize = 10.sp)
@@ -219,7 +203,6 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    //phần khu vực xem
                     Box(
                         modifier = Modifier
                             .size(animatedShapeSize)
@@ -248,7 +231,6 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                             )
                         }
                     }
-// phần hide text
                     Spacer(Modifier.height(16.dp))
                     AnimatedVisibility(visible = showText) {
                         Text(
@@ -263,7 +245,6 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                         )
                     }
                     Spacer(Modifier.height(8.dp))
-                    // phần thay đổi tbao
                     AnimatedContent(targetState = messageIndex, label = "Message") { index ->
                         Text(messages[index], fontSize = 10.sp, color = Purple, letterSpacing = 1.sp)
                     }
@@ -272,7 +253,6 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                     color = MutedInk, fontSize = 11.sp)
             }
 
-            //phần chia tap ( cho dễ thao tác)
             Row(
                 modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -296,7 +276,6 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                         ControlSlider("Corner Radius", cornerRadius, 0f..90f, "dp") { cornerRadius = it }
                         ControlSlider("Shape Rotation", shapeRotation, 0f..360f, "°") { shapeRotation = it }
                     }
-                    // phần tùy chỉnh icon
                     "Icon" -> {
                         SectionTitle("♡  Icon Customizer")
                         Hint("Icons are drawn as vectors in Canvas, so tinting works reliably.")
@@ -330,14 +309,12 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                         }
                         Hint("Select an icon to replace the hand-drawn preview.")
                     }
-// phần vẽ icon (chuột + tay)
                     "Draw" -> {
                         SectionTitle("✎  Draw Your Own Icon")
                         Hint("Draw with your finger or mouse. Tap once for a dot; drag for lines.")
                         Text("Brush Color", fontWeight = FontWeight.SemiBold, color = Ink)
                         ColorPalette(brushColor) { brushColor = it }
                         ControlSlider("Brush Size", brushSize, 2f..20f, "dp") { brushSize = it }
-                        //bảng vẽ Canvas
                         DrawingEditor(strokes, brushColor, brushSize)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Box(Modifier.weight(1f)) {
@@ -390,8 +367,7 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                             Switch(checked = showText, onCheckedChange = { showText = it })
                         }
                     }
-//phần nút điều khiển animation
-                    else -> { // motion
+                    else -> {
                         SectionTitle("✧  Animation Controls")
                         Hint("Try each API, then explain the transition in your report.")
                         GlassAction("Next Animated Message", fillWidth = true) {
@@ -416,7 +392,6 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                     }
                 }
             }
-// phần reset lại hết
             GlassAction("↻  Reset All Settings", fillWidth = true) {
                 shapeColor = Pastels[0]; shapeSize = 150f; cornerRadius = 28f
                 shapeRotation = 0f
@@ -537,8 +512,6 @@ private fun ControlSlider(
     }
 }
 
-// phần vẽ các icon hình trái tim, sao, hoa { ko cần thư viện bên ngoài}
-
 @Composable
 private fun PresetIcon(type: String, color: Color, modifier: Modifier = Modifier) {
     Canvas(modifier) {
@@ -601,7 +574,7 @@ private fun PresetIcon(type: String, color: Color, modifier: Modifier = Modifier
                 }
                 drawPath(p, color)
             }
-            else -> { // sparkle
+            else -> {
                 val p = Path().apply {
                     moveTo(cx, cy - d * .48f)
                     lineTo(cx + d * .13f, cy - d * .13f)
@@ -618,8 +591,6 @@ private fun PresetIcon(type: String, color: Color, modifier: Modifier = Modifier
         }
     }
 }
-
-//phần tự vẽ
 
 private fun normalized(point: Offset, width: Int, height: Int): Offset = Offset(
     (point.x / width.coerceAtLeast(1).toFloat()).coerceIn(0f, 1f),
@@ -638,8 +609,6 @@ private fun DrawingEditor(
             .clip(RoundedCornerShape(18.dp))
             .background(Color.White.copy(alpha = .7f))
             .border(1.dp, Color(0xFFE5D8F1), RoundedCornerShape(18.dp))
-            // ưu tiên thao tác chạm  và kéo trên vùng vẽ
-            // tránh bị cuộn khi vẽ theo chiều dọc & chạm 1 lần thì tạo dấu chấm.
             .pointerInput(brushColor, brushSize) {
                 awaitEachGesture {
                     val down = awaitFirstDown(requireUnconsumed = false)

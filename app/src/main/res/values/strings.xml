@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MidtermGraphicsDemo</string>
+    <string name="bell_icon_desc">Bell Icon</string>
+    <string name="switch_to_opengl">Switch to OpenGL 3D</string>
 </resources>
