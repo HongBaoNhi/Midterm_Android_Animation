@@ -36,7 +36,7 @@ class Simple2DGameView(context: Context) : View(context) {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawColor(Color.parseColor("#F8F5FC"))
+        canvas.drawColor(Color.parseColor("#FFF0F5"))
 
         val paddleY = height - 180f
 

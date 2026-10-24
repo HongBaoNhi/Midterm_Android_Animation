@@ -33,9 +33,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Root container - Unified Light Pastel Background
+        // Root container - Lavender Blush Light Pink Theme
         rootLayout = FrameLayout(this).apply {
-            setBackgroundColor(Color.parseColor("#F8F5FC"))
+            setBackgroundColor(Color.parseColor("#FFF0F5"))
         }
 
         // ==================== 1. MAIN MENU DASHBOARD ====================
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
         demoContainer = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             visibility = View.GONE
-            setBackgroundColor(Color.parseColor("#F8F5FC"))
+            setBackgroundColor(Color.parseColor("#FFF0F5"))
             layoutParams = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT
@@ -225,8 +225,8 @@ class MainActivity : AppCompatActivity() {
             background = GradientDrawable().apply {
                 shape = GradientDrawable.RECTANGLE
                 cornerRadius = 32f
-                setColor(Color.parseColor("#FEFCFF"))
-                setStroke(2, Color.parseColor("#E7DEF2"))
+                setColor(Color.WHITE)
+                setStroke(2, Color.parseColor("#F3D5E0"))
             }
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -261,7 +261,7 @@ class MainActivity : AppCompatActivity() {
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
-            setBackgroundColor(Color.parseColor("#F8F5FC"))
+            setBackgroundColor(Color.parseColor("#FFF0F5")) // Lavender Blush light pink
         }
 
         val imageView = ImageView(this).apply {
