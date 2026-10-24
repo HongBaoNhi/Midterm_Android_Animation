@@ -61,6 +61,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.animation:animation")
     implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("com.airbnb.android:lottie-compose:6.7.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     // 3. Testing

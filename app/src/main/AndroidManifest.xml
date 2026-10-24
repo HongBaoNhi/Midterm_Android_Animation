@@ -28,15 +28,15 @@
             </intent-filter>
         </activity>
 
-        <!-- 2. Màn hình Jetpack Compose Animation của Thành viên 1 -->
+        <!-- 2. Màn hình Jetpack Compose Animation -->
         <activity
             android:name=".ComposeAnimationActivity"
             android:exported="false"
             android:theme="@style/Theme.MidtermGraphicsDemo" />
 
-        <!-- 3. Màn hình OpenGL ES & Vector Drawable của Thành viên 2 -->
+        <!-- 3. Màn hình Lottie Animation -->
         <activity
-            android:name=".Member2Activity"
+            android:name=".LottieAnimationActivity"
             android:exported="false"
             android:theme="@style/Theme.MidtermGraphicsDemo" />
 

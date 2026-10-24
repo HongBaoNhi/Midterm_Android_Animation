@@ -93,7 +93,7 @@ class ComposeAnimationActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MotionLabApp(onBackClick: () -> Unit = {}) {
+fun MotionLabApp(onBackClick: () -> Unit = {}) {
     // phần hình dạng
     var shapeColor by remember { mutableStateOf(Pastels[0]) }
     var shapeSize by remember { mutableFloatStateOf(150f) }
