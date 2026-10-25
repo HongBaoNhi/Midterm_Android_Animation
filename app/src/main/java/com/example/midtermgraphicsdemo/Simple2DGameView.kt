@@ -61,7 +61,7 @@ class Simple2DGameView(context: Context) : View(context) {
         paint.alpha = 255
 
         animTick += 0.12f
-        val pulseRadius = 45f + (sin(animTick) * 10f) // Radius oscillates between 35 and 55
+        val pulseRadius = 45f + (sin(animTick) * 10f)
         paint.color = Color.parseColor("#FFA801")
         canvas.drawCircle(targetX, targetY, pulseRadius, paint)
 

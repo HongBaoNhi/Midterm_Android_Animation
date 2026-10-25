@@ -269,7 +269,7 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
             GlassPanel {
                 when (selectedTab) {
                     "Shape" -> {
-                        SectionTitle("◈  Shape Customizer")
+                        SectionTitle("◈  Shape Customize")
                         Hint("Pick a pastel color for your shape.")
                         ColorPalette(shapeColor, ::selectPresetShapeColor)
                         ControlSlider("Shape Size", shapeSize, 60f..220f, "dp") { shapeSize = it }
@@ -277,7 +277,7 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                         ControlSlider("Shape Rotation", shapeRotation, 0f..360f, "°") { shapeRotation = it }
                     }
                     "Icon" -> {
-                        SectionTitle("♡  Icon Customizer")
+                        SectionTitle("♡  Icon Customize")
                         Hint("Icons are drawn as vectors in Canvas, so tinting works reliably.")
                         Row(
                             modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -331,7 +331,6 @@ fun MotionLabApp(onBackClick: () -> Unit = {}) {
                         }
                         Hint("Drawings stay available when you switch tabs; Reset clears them.")
                     }
-// phần edit nội dung và front chữ
                     "Text" -> {
                         SectionTitle("Aa  Typography Editor")
                         OutlinedTextField(

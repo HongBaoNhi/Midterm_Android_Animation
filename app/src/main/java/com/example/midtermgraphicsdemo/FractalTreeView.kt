@@ -63,7 +63,7 @@ class FractalTreeView(context: Context) : View(context) {
         canvas.drawText("• Recursion Depth: $currentStage / $maxDepth", 40f, 125f, infoPaint)
         canvas.drawText("• Active Branches: $branchCount", 40f, 175f, infoPaint)
         canvas.drawText("• Branch Angle: ${branchAngle.toInt()}° (Swipe horizontally to adjust)", 40f, 225f, infoPaint)
-        canvas.drawText("👉 Tap the bottom half of the screen to regrow", 40f, height - 60f, infoPaint)
+        canvas.drawText(" Tap the bottom half of the screen to regrow", 40f, height - 60f, infoPaint)
     }
 
     private fun drawFractalBranch(

@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
             gravity = Gravity.CENTER_HORIZONTAL
         }
 
-        // Header Title
         val tvHeaderTitle = TextView(this).apply {
             text = "GRAPHICS & ANIMATION"
             textSize = 24f
@@ -252,7 +251,6 @@ class MainActivity : AppCompatActivity() {
 
         val renderer = MyGLRenderer()
 
-        // 1. Top 3D Viewport Area
         val viewportArea = FrameLayout(this).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -300,7 +298,6 @@ class MainActivity : AppCompatActivity() {
         viewportArea.addView(glSurfaceView)
         viewportArea.addView(tvHint)
 
-        // 2. Bottom Sheet Control Panel Area
         val controlScrollView = ScrollView(this).apply {
             isVerticalScrollBarEnabled = false
             isFillViewport = true
@@ -326,7 +323,6 @@ class MainActivity : AppCompatActivity() {
             setPadding(dp(20), dp(18), dp(20), dp(24))
         }
 
-        // Section 1: Surface Color (Circular Swatches)
         val tvColorTitle = TextView(this).apply {
             text = "🎨 Surface Color"
             textSize = 14f
@@ -394,7 +390,6 @@ class MainActivity : AppCompatActivity() {
         updateColorStyles(0)
         colorScrollView.addView(colorRow)
 
-        // Section 2: Material & Lighting Sliders
         val tvMaterialTitle = TextView(this).apply {
             text = "✨ Material & Lighting"
             textSize = 14f
@@ -406,7 +401,6 @@ class MainActivity : AppCompatActivity() {
         var currentRoughness = 0.3f
         var currentShininess = 0.8f
 
-        // Roughness Header
         val roughnessHeaderRow = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -465,7 +459,6 @@ class MainActivity : AppCompatActivity() {
         roughnessSubRow.addView(tvSmoothHint)
         roughnessSubRow.addView(tvRoughHint)
 
-        // Shininess Header
         val shininessHeaderRow = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -524,7 +517,6 @@ class MainActivity : AppCompatActivity() {
         shininessSubRow.addView(tvMatteHint)
         shininessSubRow.addView(tvGlossyHint)
 
-        // Section 3: 3D Shapes (2x2 Grid)
         val tvShapeTitle = TextView(this).apply {
             text = "📐 3D Shapes"
             textSize = 14f
@@ -601,7 +593,6 @@ class MainActivity : AppCompatActivity() {
         shapeGrid.addView(shapeRow1)
         shapeGrid.addView(shapeRow2)
 
-        // Assemble Control Panel
         controlPanel.addView(tvColorTitle)
         controlPanel.addView(colorScrollView)
         controlPanel.addView(tvMaterialTitle)
@@ -616,7 +607,6 @@ class MainActivity : AppCompatActivity() {
 
         controlScrollView.addView(controlPanel)
 
-        // Assemble root container
         rootContainer.addView(viewportArea)
         rootContainer.addView(controlScrollView)
 

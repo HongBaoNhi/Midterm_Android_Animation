@@ -56,8 +56,6 @@ class LottieAnimationActivity : ComponentActivity() {
 
 @Composable
 private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
-    // list animation
-    // animation liên kết file JSON trong res/raw
     val items = remember {
         listOf(
             AnimationItem("Orbit", "Pastel planets", R.raw.pastel_orbit),
@@ -81,7 +79,6 @@ private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
     )
     val anim = rememberLottieAnimatable()
     val scope = rememberCoroutineScope()
-// phần logic phát animation
     LaunchedEffect(composition, selected, playing, looping, reversed, speed, scrubbing, resetNumber) {
         val current = composition ?: return@LaunchedEffect
         if (!playing || scrubbing) return@LaunchedEffect
@@ -167,8 +164,6 @@ private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
                 }
             }
         }
-// phần danh sách
-        // khi user chọn mục khác -> thì sẽ nạp JSON tương ứng với mục đó
         StudioPanel {
             SectionHeading("Animation Library")
             Text("Four original local Lottie JSON files", color = Subtle, fontSize = 12.sp)
@@ -201,7 +196,6 @@ private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
                 }
             }
         }
-// phần pause
         StudioPanel {
             SectionHeading("Playback Controller")
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -218,7 +212,6 @@ private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
                     }
                 }
             }
-            // phần chạy lặp với đổi chiều
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Infinite Loop", color = Ink, modifier = Modifier.weight(1f))
                 Switch(checked = looping, onCheckedChange = { looping = it })
@@ -227,7 +220,6 @@ private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
                 Text("Reverse direction", color = Ink, modifier = Modifier.weight(1f))
                 Switch(checked = reversed, onCheckedChange = { reversed = it })
             }
-// phần tốc độ phát
             Text("Speed: ${format(speed)}×", color = Ink, fontWeight = FontWeight.SemiBold)
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(0.5f, 1f, 1.5f, 2f).forEach { option ->
@@ -235,7 +227,6 @@ private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
                 }
             }
         }
-// phần tua animation
         StudioPanel {
             SectionHeading("Timeline / Frame Scrubber")
             Text("Drag to seek, release to resume from that frame", color = Subtle, fontSize = 12.sp)
@@ -249,7 +240,7 @@ private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
                 onValueChangeFinished = {
                     val seekTo = scrubProgress
                     scope.launch {
-                        anim.snapTo(composition, seekTo) // chuyển đến vtri vừa chọn
+                        anim.snapTo(composition, seekTo)
                         scrubbing = false
                         playing = true
                     }
@@ -262,7 +253,6 @@ private fun LottieStudioScreen(onBackClick: () -> Unit = {}) {
                 Text("100%", color = Subtle, fontSize = 12.sp)
             }
         }
-// phần show in4
         StudioPanel {
             SectionHeading("Animation Information")
             val c: LottieComposition? = composition
